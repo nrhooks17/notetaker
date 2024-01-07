@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.local
+    ports: 
+      - "5000:5000"
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/notetaker
+      - FLASK_ENV=development
+      - APP_DEBUG=True
+      - APP_TESTING=True
+    depends_on:
+      - mongo
+    volumes:
+      - .:/opt/webapps/notetaker
+  react-app:
+    build:
+       context: ../../../js/projects/notetaker
+       dockerfile: ../../../js/projects/notetaker/Dockerfile
+    volumes:
+      - ../../../js/projects/notetaker:/opt/webapps/notetaker
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:5000/api
+    depends_on:
+      - app
+  mongo:
+    image: mongo:5.0.22
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+
+volumes: 
+  mongo-data:
+  notetaker-node-modules:
