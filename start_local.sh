@@ -7,14 +7,14 @@ echo "Docker is now runinng"
 
 # start pycharm and webstorm
 echo "starting pycharm"
-/home/centralstation/.local/share/JetBrains/Toolbox/scripts/pycharm &
+/home/centralstation/.local/share/JetBrains/Toolbox/scripts/pycharm1 &
 echo "pycharm is now running"
 
 echo "sleeping for 5 seconds"
-sleep 5
+sleep 10 
 
 echo "starting webstorm"
-/home/centralstation/.local/share/JetBrains/Toolbox/scripts/webstorm &
+/home/centralstation/.local/share/JetBrains/Toolbox/scripts/webstorm1 &
 echo "webstorm is now running"
 
 
