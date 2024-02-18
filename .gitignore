@@ -3,3 +3,6 @@ __pycache__/
 
 # ignore .idea folder
 .idea/
+
+#startup script for local development. don't really need this in github
+start_local.sh
