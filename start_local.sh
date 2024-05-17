@@ -22,11 +22,7 @@ echo "webstorm is now running"
 echo "moving into the notetaker project directory"
 cd /opt/webapps/python/projects/notetaker
 
-# source the notetaker project commands
-echo "sourcing project commands for notetaker"
-source /opt/webapps/python/projects/notetaker/commands.sh
-
 # start the docker container
 echo "building the notetaker project"
-notetaker build
+notetaker -b 
 
