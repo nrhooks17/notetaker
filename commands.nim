@@ -14,7 +14,8 @@ proc main() =
       echo "  -b, --build   Build and run the project"
       echo "  -sh, --shell  Open the shell"
       echo "  -r, --run     Run the project"
-      echo "  -shr, --shell react Open a shell in the react container"
+      echo "  -shr, --shell-react Open a shell in the react container"
+      echo "  -shd, --shell-db  Open a shell in the MongoDB container"
       echo "  -d, --down    Stop the project"
     of "-b", "--build":
       error = execCmd("docker compose up --build")
@@ -24,6 +25,8 @@ proc main() =
       error = execCmd("docker compose up")
     of "-shr", "--shell-react":
       error = execCmd("docker exec -it notetaker-react-app-1 /bin/bash")
+    of "-shd", "--shell-db":
+      error = execCmd("docker exec -it notetaker-mongo-1 /bin/bash")
     of "-d", "--down":
       error = execCmd("docker compose down")
     else:

@@ -12,6 +12,7 @@ services:
       - FLASK_ENV=development
       - APP_DEBUG=True
       - APP_TESTING=True
+      - AMOUNT_PER_PAGE=10
     depends_on:
       - mongo
     volumes:
@@ -26,6 +27,7 @@ services:
       - "3000:3000"
     environment:
       - NEXT_PUBLIC_API_URL=http://localhost:5000/api
+      - NEXT_PUBLIC_ITEMS_PER_PAGE=5
     depends_on:
       - app
   mongo:
