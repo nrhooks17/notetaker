@@ -21,11 +21,15 @@ def create_app():
     app.register_blueprint(errors_blueprint)
     app.mongo_client = MongoClient(os.getenv('MONGO_URI'))
 
+    # setting the amount_per_page variable in the app context so that it can be accessed by other parts of the app.
+    with app.app_context():
+        app.amount_per_page = int(os.getenv('AMOUNT_PER_PAGE', 10))
+
     # These values are set in the docker-compose.yml file and Kubernetes deployment file if we decide to use Kubernetes.
     # They need to be converted to boolean values because os.getenv() always returns a string.
     app.config['TESTING'] = True if os.getenv('APP_TESTING') == 'True' else False
     app.config['DEBUG'] = True if os.getenv('APP_DEBUG') == 'True' else False
-
     app.config['ENV'] = os.getenv('FLASK_ENV')
+    app.config['AMOUNT_PER_PAGE'] = os.getenv('AMOUNT_PER_PAGE')
 
     return app
