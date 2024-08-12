@@ -36,13 +36,15 @@ def get_notes():
             notebook = request.args.get("notebook")
             upper_date_bound = request.args.get("upperDateBound")
             lower_date_bound = request.args.get("lowerDateBound")
+            note_search_string = request.args.get("noteSearchString")
 
             current_app.logger.info(f' notes page: {page}')
             current_app.logger.info(f' notebook: {notebook}')
             current_app.logger.info(f' upper date bound: {upper_date_bound}')
             current_app.logger.info(f' lower date bound: {lower_date_bound}')
+            current_app.logger.info(f' note search string: {note_search_string}')
 
-            return dumps(Note.get_notes(page, notebook, upper_date_bound, lower_date_bound))
+            return dumps(Note.get_notes(page, notebook, upper_date_bound, lower_date_bound, note_search_string))
 
     except Exception as e:
         current_app.logger.error(f'error getting notes: {traceback.print_exception(e)}')

@@ -1,8 +1,8 @@
 from flask import current_app, make_response
 from pymongo import DESCENDING
 from datetime import datetime
-import pytz
 import traceback
+import re
 
 
 class Note:
@@ -39,7 +39,7 @@ class Note:
             return make_response({"message": error_message}, 500)
 
     @staticmethod
-    def get_notes(page: int = 1, notebook: str = "default", upper_date_bound: str = None, lower_date_bound: str = None):
+    def get_notes(page: int = 1, notebook: str = "default", upper_date_bound: str = None, lower_date_bound: str = None, note_search_string: str = ""):
         try:
             current_app.logger.info(f'inside of Note.get_notes() function')
 
@@ -50,9 +50,10 @@ class Note:
             current_app.logger.info(f'grabbing notes from database')
             current_app.logger.info(f'notebook: {notebook}, page: {page}')
             current_app.logger.info(f'upper date bound: {upper_date_bound}, lower date bound: {lower_date_bound}')
+            current_app.logger.info(f'note search string: {note_search_string}')
 
             # grab parameters for find query
-            query = Note.retrieve_notes_query(lower_date_bound, notebook, upper_date_bound)
+            query = Note.retrieve_notes_query(lower_date_bound, notebook, upper_date_bound, note_search_string)
 
             # grab total pages
             total_pages = Note.retrieve_total_pages(query)
@@ -70,7 +71,7 @@ class Note:
             return make_response({"message": error_message}, 500)
 
     @staticmethod
-    def retrieve_notes_query(lower_date_bound: str, notebook: str, upper_date_bound: str):
+    def retrieve_notes_query(lower_date_bound: str, notebook: str, upper_date_bound: str, note_search_string: str):
 
 
         date_format: str = '%Y-%m-%d %H:%M:%S'
@@ -93,6 +94,17 @@ class Note:
             query = {
                 "notebook": notebook,
             }
+
+        # escape any regex characters
+        note_search_string = re.escape(note_search_string)
+
+        # filter based on search string if the query parameter exists.
+        if note_search_string or note_search_string != "":
+            query["text"] = {"$regex": note_search_string, "$options": "i"}
+
+
+        current_app.logger.info(f'query: {query}')
+
         return query
 
     @staticmethod
@@ -100,6 +112,7 @@ class Note:
         try:
             current_app.logger.info('inside of Note.retrieve_total_pages() function')
             notes  = Note.get_note_collection()
+            current_app.logger.info(f'query: {query}')
             total_notes: str = notes.count_documents(query)
 
             # Need this due to the fact that the page count is not always divisible by the total notes.
