@@ -6,3 +6,5 @@ __pycache__/
 
 #startup script for local development. don't really need this in github
 start_local.sh
+start_app.nim
+nohup.out
