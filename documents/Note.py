@@ -102,9 +102,7 @@ class Note:
         if note_search_string or note_search_string != "":
             query["text"] = {"$regex": note_search_string, "$options": "i"}
 
-
         current_app.logger.info(f'query: {query}')
-
         return query
 
     @staticmethod
